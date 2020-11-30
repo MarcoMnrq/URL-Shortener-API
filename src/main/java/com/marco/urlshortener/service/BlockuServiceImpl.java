@@ -3,12 +3,13 @@ package com.marco.urlshortener.service;
 import com.marco.urlshortener.domain.model.Blocku;
 import com.marco.urlshortener.domain.repository.BlockuRepository;
 import com.marco.urlshortener.domain.service.BlockuService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.lang.module.ResolutionException;
+import java.util.Optional;
 
 @Service
 public class BlockuServiceImpl implements BlockuService {
@@ -18,16 +19,17 @@ public class BlockuServiceImpl implements BlockuService {
 
     @Override
     public Blocku createBlocku(Blocku blocku){
-        if(blockuRepository.findByShortUrl(blocku.getShortUrl()).isEmpty()){
+        Optional<Blocku> existingBlocku = blockuRepository.findByShortUrl(blocku.getShortUrl());
+        if (!existingBlocku.isEmpty()){
+            throw new IllegalArgumentException("Blocku already exists with shortUrl");
+        }else {
             return blockuRepository.save(blocku);
-        }else{
-            throw new IllegalArgumentException("Blocku already exists");
         }
     }
 
     @Override
-    public Blocku getBlockuByShortUrl(String shortUrl) throws NotFoundException {
-        return blockuRepository.findByShortUrl(shortUrl).orElseThrow(()-> new NotFoundException("Not found"));
+    public Blocku getBlockuByShortUrl(String shortUrl) {
+        return blockuRepository.findByShortUrl(shortUrl).orElseThrow(() -> new ResolutionException(shortUrl));
     }
 
     @Override

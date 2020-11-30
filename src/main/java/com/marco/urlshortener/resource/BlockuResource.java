@@ -1,7 +1,6 @@
 package com.marco.urlshortener.resource;
 
 import lombok.Data;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,5 +9,5 @@ public class BlockuResource {
     private UUID id;
     private String shortUrl;
     private String url;
-    private Date createdAt;
+    //private Date createdAt;
 }

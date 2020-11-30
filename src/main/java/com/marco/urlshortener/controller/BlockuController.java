@@ -33,7 +33,7 @@ public class BlockuController {
     }
 
     @GetMapping("/blockus/{shortUrl}")
-    public BlockuResource getBlocku(@PathVariable(name = "shortUrl") String shortUrl) throws NotFoundException {
+    public BlockuResource getBlocku(@PathVariable(name = "shortUrl") String shortUrl) {
         return convertToResource(blockuService.getBlockuByShortUrl(shortUrl));
     }
 
